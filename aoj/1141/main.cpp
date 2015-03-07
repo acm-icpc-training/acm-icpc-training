@@ -3,6 +3,10 @@
 
 using namespace std;
 
+const int MAX_N = 1000000;
+
+vector<int> is_prime_table;
+
 bool IsPrime(int x) {
   if (x == 1) return false;
   for (int i = 2; i * i <= x; ++i) {
@@ -20,7 +24,7 @@ bool ProcessCase() {
   int x = a;
   int count = 0;
   while (true) {
-    if (IsPrime(x)) {
+    if (is_prime_table[x]) {
       ++count;
     }
     if (count == n) {
@@ -32,6 +36,10 @@ bool ProcessCase() {
 }
 
 int main() {
+  is_prime_table.assign(MAX_N + 1, false);
+  for (int i = 1; i <= MAX_N; ++i) {
+    is_prime_table[i] = IsPrime(i);
+  }
   while (ProcessCase());
   return 0;
 }
