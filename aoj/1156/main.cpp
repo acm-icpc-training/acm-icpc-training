@@ -14,11 +14,6 @@ const int DYS[] = {0, 1, 0, -1};
 struct VertexCost {
   int x, y, dir;
   int cost;
-  string VertexID() {
-    stringstream ss;
-    ss << "(" << x << "," << y << "," << dir << ")";
-    return ss.str();
-  }
 };
 
 bool GreaterCost(VertexCost& vc1, VertexCost& vc2) {
@@ -49,21 +44,22 @@ class Main {
 
     priority_queue<VertexCost, vector<VertexCost>, decltype(&GreaterCost)>
         pq(&GreaterCost);
-    unordered_set<string> visited;
+    vector<vector<vector<bool>>>
+        visited(h, vector<vector<bool>>(w, vector<bool>(4, false)));
 
     VertexCost start({0, 0, 0, 0});
     pq.push(start);
     while (!pq.empty()) {
       VertexCost vertex_cost = pq.top();
       pq.pop();
-      string vertex_id = vertex_cost.VertexID();
-      if (visited.find(vertex_id) != visited.end()) continue;
-      visited.insert(vertex_id);
 
       int x = vertex_cost.x;
       int y = vertex_cost.y;
       int dir = vertex_cost.dir;
       int cost = vertex_cost.cost;
+
+      if (visited[y][x][dir]) continue;
+      visited[y][x][dir] = true;
 
       if (x == w - 1 && y == h - 1) {
         cout << cost << endl;
