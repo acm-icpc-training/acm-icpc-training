@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -5,16 +6,21 @@ using namespace std;
 
 const int MAX_N = 1000000;
 
-vector<int> is_prime_table;
+vector<int> primes;
 
-bool IsPrime(int x) {
-  if (x == 1) return false;
-  for (int i = 2; i * i <= x; ++i) {
-    if (x % i == 0) {
-      return false;
+void FillPrimes() {
+  for (int i = 2; i <= MAX_N; ++i) {
+    bool is_prime = true;
+    for (int k = 0; k < primes.size() && primes[k] * primes[k] <= i; ++k) {
+      if (i % primes[k] == 0) {
+        is_prime = false;
+        break;
+      }
+    }
+    if (is_prime) {
+      primes.push_back(i);
     }
   }
-  return true;
 }
 
 bool ProcessCase() {
@@ -24,7 +30,7 @@ bool ProcessCase() {
   int x = a;
   int count = 0;
   while (true) {
-    if (is_prime_table[x]) {
+    if (binary_search(primes.begin(), primes.end(), x)) {
       ++count;
     }
     if (count == n) {
@@ -36,10 +42,7 @@ bool ProcessCase() {
 }
 
 int main() {
-  is_prime_table.assign(MAX_N + 1, false);
-  for (int i = 1; i <= MAX_N; ++i) {
-    is_prime_table[i] = IsPrime(i);
-  }
+  FillPrimes();
   while (ProcessCase());
   return 0;
 }
